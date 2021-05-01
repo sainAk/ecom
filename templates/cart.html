@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head_title %}
+Cart {{ cart_item_count }} | ecom
+{% endblock %}
+
 {% block nav_items %}
 
     <!-- display user plofile if logged in  -->

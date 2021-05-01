@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head_title %}
+Signup | ecom
+{% endblock %}
+
 {% block nav_items %}
 
     <li class="nav-item"><a class="nav-link" style="border:1px solid var(--white) ;border-radius:54px;padding-right: 12px;padding-left: 12px;" href="/cart/"><i class="fas fa-shopping-cart"></i> Cart {{ cart_item_count }}</a></li>

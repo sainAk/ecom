@@ -1,5 +1,10 @@
 {% extends "base.html" %} 
 {% load static %} 
+
+{% block head_title %}
+Home | ecom
+{% endblock %}
+
 {% block nav_items %} 
 
     {% if user.is_authenticated %}

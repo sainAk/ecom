@@ -71,6 +71,7 @@ class CartView(ListView):
         cart, total_cart_items = init_cart(self.request)
         context = {
             "cartItems": CartItem.objects.filter(cart=cart),
+            "cart_item_count":total_cart_items,
         }
         return render(self.request, "cart.html", context)
 
