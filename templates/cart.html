@@ -10,9 +10,9 @@ Cart {{ cart_item_count }} | ecom
     {% if user.is_authenticated %}
     <li class="nav-item"><a class="nav-link" href="#">{{ user.first_name }}</a></li>
     {% else %}
-    <li class="nav-item"><a class="nav-link" href="login/">Login</a></li>
+    <li class="nav-item"><a class="nav-link" href="/login/">Login</a></li>
     <li class="nav-item">
-        <a class="nav-link" href="signup/" style="
+        <a class="nav-link" href="/signup/" style="
           border-radius: 54px;
           border-color: var(--red);
           background: var(--red);
