@@ -85,11 +85,11 @@ class SignupView(View):
 
     def post(self, *args, **kwargs):
         name = self.request.POST.get("name")
-        email = self.request.POST.get("email")
+        username = self.request.POST.get("username")
         password = self.request.POST.get("password")
 
         cart, _ = init_cart(self.request)
-        user = User.objects.create(username=email, password=password, first_name=name)
+        user = User.objects.create(username=username, password=password, first_name=name)
         user.save()
         customer = Customer.objects.create(user=user, cart=cart)
         customer.save()
@@ -105,11 +105,11 @@ class LoginView(View):
         return render(self.request, "login.html", context)
 
     def post(self, *args, **kwargs):
-        email = self.request.POST.get("email")
+        username = self.request.POST.get("username")
         password = self.request.POST.get("password")
-        print(email, password)
+        print(username, password)
 
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is None:
             # auth err
