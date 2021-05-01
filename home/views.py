@@ -1,15 +1,14 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.core.checks import messages
 from django.db.models import Sum
-from django.http import HttpResponse, request
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import DetailView, ListView, View
+from django.views.generic import ListView, View
 
 from .models import Cart, CartItem, Customer, Item
 
 
-def init_cart(request: request.HttpRequest):
+def init_cart(request: HttpRequest):
     try:
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(pk=cart_id)
@@ -24,7 +23,7 @@ def init_cart(request: request.HttpRequest):
     return cart, total_cart_items
 
 
-def add_to_cart(request, pk):
+def add_to_cart(request: HttpRequest, pk):
     cart, total_cart_items = init_cart(request)
     item = get_object_or_404(Item, pk=pk)
 
@@ -38,7 +37,7 @@ def add_to_cart(request, pk):
 
 
 # delete item from cart
-def remove_from_cart(request, pk):
+def remove_from_cart(request: HttpRequest, pk):
     cart, total_cart_items = init_cart(request)
     item = get_object_or_404(Item, pk=pk)
 
@@ -89,10 +88,11 @@ class SignupView(View):
         email = self.request.POST.get("email")
         password = self.request.POST.get("password")
 
-        cart = init_cart(self.request)
+        cart, _ = init_cart(self.request)
         user = User.objects.create(username=email, password=password, first_name=name)
         user.save()
         customer = Customer.objects.create(user=user, cart=cart)
+        customer.save()
         return redirect("home:login")
 
 
