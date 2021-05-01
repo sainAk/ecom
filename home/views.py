@@ -122,13 +122,6 @@ class LoginView(View):
         customer = Customer.objects.get(user=user)
         cust_cart = customer.cart
 
-        # edge case
-        if not cust_cart:
-            cust_cart = Cart.objects.create()
-            cust_cart.save()
-            customer.cart = cust_cart
-            customer.save()
-
         cart, _ = init_cart(self.request)
         cart_items = CartItem.objects.filter(cart=cart)
         for cart_item in cart_items:
@@ -138,9 +131,9 @@ class LoginView(View):
                 )
                 cust_cart_item.quantity += 1
                 cust_cart_item.save()
-                # delete item from temp cart
+                cart_item.delete()
             except CartItem.DoesNotExist:
                 cart_item.cart = cust_cart
                 cart_item.save()
-
+        self.request.session["cart_id"] = cust_cart.id
         return redirect("home:home")
