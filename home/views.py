@@ -93,7 +93,9 @@ class SignupView(View):
         user.save()
         customer = Customer.objects.create(user=user, cart=cart)
         customer.save()
-        return redirect("home:login")
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return redirect("home:home")
 
 
 class LoginView(View):
