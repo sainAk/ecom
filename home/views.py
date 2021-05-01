@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.http import HttpRequest
@@ -89,7 +89,7 @@ class SignupView(View):
         password = self.request.POST.get("password")
 
         cart, _ = init_cart(self.request)
-        user = User.objects.create(username=username, password=password, first_name=name)
+        user = User.objects.create_user(username=username, password=password, first_name=name)
         user.save()
         customer = Customer.objects.create(user=user, cart=cart)
         customer.save()
@@ -110,15 +110,13 @@ class LoginView(View):
         print(username, password)
 
         user = authenticate(username=username, password=password)
+        login(self.request, user)
 
         if user is None:
             # auth err
             return redirect("home:login")
 
-        # just for now
-        # return redirect("home:home")
-
-        # make a logic to merge carts
+        # logic to merge cartlocal and pre-registered carts
         customer = Customer.objects.get(user=user)
         cust_cart = customer.cart
 
@@ -129,7 +127,7 @@ class LoginView(View):
             customer.cart = cust_cart
             customer.save()
 
-        cart = init_cart(self.request)
+        cart, _ = init_cart(self.request)
         cart_items = CartItem.objects.filter(cart=cart)
         for cart_item in cart_items:
             try:
